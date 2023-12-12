@@ -1,0 +1,38 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-color: #f6f6f6;
+}
+.navbar {
+  display: flex;
+  background-color: black;
+  color: white;
+  height: 3rem;
+  justify-content: space-around;
+  align-items: center;
+  font-size: larger;
+  margin-bottom: 3rem;
+}
+a {
+  /* color: inherit; Use the default text color */
+  text-decoration: none; /* Remove underline */
+}
+
+a:visited {
+  color: inherit; /*Use the default text color for visited links */
+}
+ul {
+  list-style-type: none;
+}
+/* li {
+  margin-right: 5rem;
+  font-size: larger;
+} */
+
+/*
+#fafafa
+#f6f6f6
+
+*/
