@@ -2,9 +2,13 @@
   margin: 0;
   padding: 0;
 }
-body {
-  background-color: #f6f6f6;
+/* app container */
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* 100% of the viewport height */
 }
+/* nav bar in every page */
 .navbar {
   display: flex;
   background-color: black;
@@ -13,26 +17,22 @@ body {
   justify-content: space-around;
   align-items: center;
   font-size: larger;
-  margin-bottom: 3rem;
+  /* margin-bottom: 3rem; */
 }
+/* remove the bullet in the ul and remain the color white of every link in the nav bar */
 a {
-  /* color: inherit; Use the default text color */
-  text-decoration: none; /* Remove underline */
+  text-decoration: none;
 }
 
 a:visited {
-  color: inherit; /*Use the default text color for visited links */
+  color: inherit;
 }
 ul {
   list-style-type: none;
 }
-/* li {
-  margin-right: 5rem;
-  font-size: larger;
-} */
 
-/*
-#fafafa
-#f6f6f6
-
-*/
+/* container of every page in the app*/
+.page-container {
+  flex: 1;
+  background-color: #f6f6f6;
+}

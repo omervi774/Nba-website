@@ -10,7 +10,7 @@ import FavoriteLayout from "./routes/FavoriteLayout.jsx";
 
 function App() {
   return (
-    <>
+    <div className="container">
       <nav>
         <ul className="navbar">
           <li>
@@ -40,7 +40,7 @@ function App() {
 
         <Route path="*" element={<h1>not fount</h1>} />
       </Routes>
-    </>
+    </div>
   );
 }
 
