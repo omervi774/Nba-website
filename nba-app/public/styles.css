@@ -2,12 +2,29 @@
   margin: 0;
   padding: 0;
 }
+body {
+  background-color: #e7e7e7;
+}
+div {
+  display: flex;
+}
+#root {
+  display: block;
+}
 /* app container */
 .container {
-  display: flex;
-  flex-direction: column;
   height: 100vh; /* 100% of the viewport height */
 }
+.column-container {
+  flex-direction: column;
+}
+
+/* container of all the divis that centerize its content */
+.centerize-container {
+  align-items: center;
+  justify-content: center;
+}
+
 /* nav bar in every page */
 .navbar {
   display: flex;
@@ -17,8 +34,9 @@
   justify-content: space-around;
   align-items: center;
   font-size: larger;
-  /* margin-bottom: 3rem; */
+  margin-bottom: 3rem;
 }
+
 /* remove the bullet in the ul and remain the color white of every link in the nav bar */
 a {
   text-decoration: none;
@@ -30,9 +48,52 @@ a:visited {
 ul {
   list-style-type: none;
 }
-
-/* container of every page in the app*/
-.page-container {
+/* every page takes the entrie free space of the screen*/
+.pages-container {
   flex: 1;
-  background-color: #f6f6f6;
+}
+.game-page-container {
+  align-items: center;
+  justify-content: start;
+}
+.teams-details-page-container {
+  gap: 2rem;
+  justify-content: center;
+}
+
+.carusel-container {
+  background-color: rgb(255, 255, 255);
+  height: 13%;
+  gap: 3rem;
+  width: 60%;
+  margin-bottom: 3rem;
+}
+.week-days-container {
+  gap: 0.5rem;
+}
+.game-container {
+  padding-top: 1rem;
+  justify-content: space-around;
+  align-items: center;
+  background-color: white;
+  width: 100%;
+}
+
+.played-games-nav {
+  background-color: white;
+  color: rebeccapurple;
+  height: 2rem;
+  margin-bottom: 0rem;
+  width: 100%;
+  justify-content: center;
+  gap: 1.3rem;
+}
+.played-games-nav a {
+  color: rebeccapurple;
+}
+img {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 1.5rem;
+  margin-bottom: 1rem;
 }
