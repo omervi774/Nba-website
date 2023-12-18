@@ -6,7 +6,7 @@ export default function TodayGames(props) {
   return (
     // Remove the curly braces around the condition
     props.games.length > 0 &&
-    props.games.map((game) => (
+    props.games.map((game, index) => (
       <div
         style={{
           display: "flex",
@@ -15,19 +15,21 @@ export default function TodayGames(props) {
           border: "0.1rem solid rebeccapurple",
           justifyContent: "center",
           marginBottom: "3rem",
+
           // alignItems: "center",
         }}
+        key={index}
       >
         {game.status === "Finished" ? (
           <AppNav
             name={"navbar played-games-nav"}
-            link1={`/${game.home.id}/${game.visitors.id},h2h`}
-            link2={`/statistics,player statistics`}
+            link1={`/games/${game.home.id}/${game.visitors.id},h2h`}
+            link2={`/games/statistics/${game.gameId},player statistics`}
           />
         ) : (
           <AppNav
             name={"navbar played-games-nav"}
-            link1={`/${game.home.id}/${game.visitors.id},h2h`}
+            link1={`/games/${game.home.id}/${game.visitors.id},h2h`}
             link2={`/statistics,player statistics`}
           />
         )}

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import DisplayFiveLastGames from "../Components/DisplayFiveLastGames";
-import ReactLoading from "react-loading";
+
+import Loader from "../Components/Loader";
 export default function H2h() {
   const { firstId, secondId } = useParams();
   const [firstLast5, setFirstLast5] = useState([]);
@@ -10,19 +11,19 @@ export default function H2h() {
   const [loader, setLoader] = useState(true);
   async function fetchAllDetails() {
     const firstTeamJason = await fetch(
-      `http://localhost:8000/games/${firstId}`
+      `http://localhost:8000/teams/games/${firstId}`
     );
     const firstTeamGames = await firstTeamJason.json();
     setFirstLast5(firstTeamGames);
 
     const secondTeamJason = await fetch(
-      `http://localhost:8000/games/${secondId}`
+      `http://localhost:8000/teams/games/${secondId}`
     );
     const secondTeamGames = await secondTeamJason.json();
     setSecondLast5(secondTeamGames);
 
     const gamesBetweenJason = await fetch(
-      `http://localhost:8000/games/${firstId}/${secondId}`
+      `http://localhost:8000/teams/games/${firstId}/${secondId}`
     );
     const gamesBetween = await gamesBetweenJason.json();
     setLast5(gamesBetween);
@@ -35,15 +36,7 @@ export default function H2h() {
   return (
     <div className="teams-details-page-container pages-container">
       {loader ? (
-        <div className="centerize-container">
-          <ReactLoading
-            type={"spinningBubbles"}
-            color={"#36D7B7"}
-            height={50}
-            width={50}
-          />
-          <h1 style={{ color: "#36D7B7", marginLeft: "0.3rem" }}>loading...</h1>
-        </div>
+        <Loader />
       ) : (
         <>
           <DisplayFiveLastGames

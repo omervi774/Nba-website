@@ -1,30 +1,42 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Home from "./routes/Home.jsx";
 import ErrorPage from "./routes/Error-page.jsx";
-import Statistics from "./routes/Statistics.jsx";
+import Standings from "./routes/Standings.jsx";
 import Live from "./routes/Live.jsx";
 import FavoritesList from "./routes/FavoritesList.jsx";
 import FavoritesId from "./routes/FavoritesId.jsx";
 import FavoriteLayout from "./routes/FavoriteLayout.jsx";
 import H2h from "./routes/H2h.jsx";
 import AppNav from "./Components/AppNav.jsx";
+import PlayersStatistics from "./routes/PlayersStatistics.jsx";
 
 function App() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Redirect to the home component after the website finishes loading
+    navigate("/games");
+  }, []);
   return (
     <div className="container column-container">
       <AppNav
         name={"navbar"}
-        link1={"/,home"}
-        link2={"/statistics,statistics"}
+        link1={"/games,home"}
+        link2={"/Standings,Standings"}
         link3={"/live,live"}
         link4={"/favorites,favorites"}
       />
       <Routes>
-        <Route path="/" element={<Home></Home>} />
-        <Route path="/:firstId/:secondId" element={<H2h></H2h>} />
+        <Route path="/">
+          <Route path="games">
+            <Route index element={<Home></Home>} />
+            <Route path=":firstId/:secondId" element={<H2h></H2h>} />
+            <Route path="statistics/:gameId" element={<PlayersStatistics />} />
+          </Route>
+        </Route>
 
-        <Route path="/statistics" element={<Statistics></Statistics>} />
+        <Route path="/Standings" element={<Standings></Standings>} />
         <Route path="/live" element={<Live></Live>} />
 
         <Route path="/favorites" element={<FavoriteLayout></FavoriteLayout>}>

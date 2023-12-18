@@ -61,7 +61,7 @@ function filteringFiveLastMatches(games) {
 }
 
 // getting all games acording to specific day.
-router.get("/:day", async (req, res) => {
+router.get("/games/:day", async (req, res) => {
   console.log("omer");
   const date = new Date();
   const day = req.params.day;
@@ -78,12 +78,11 @@ router.get("/:day", async (req, res) => {
     },
   });
 
-  console.log(response.data);
   res.status(200).json(response.data.response.map(setUpGames));
 });
 
 //getting the last 5 games of specific team
-router.get("/games/:teamId", async (req, res) => {
+router.get("/teams/games/:teamId", async (req, res) => {
   const teamId = req.params.teamId;
   const date = new Date();
   const year = date.getFullYear();
@@ -104,7 +103,7 @@ router.get("/games/:teamId", async (req, res) => {
 });
 
 //getting the last 5 games between 2 teams
-router.get("/games/:firstId/:secondId", async (req, res) => {
+router.get("/teams/games/:firstId/:secondId", async (req, res) => {
   const { firstId, secondId } = req.params;
 
   const response = await axios.get(`${url}/games`, {
@@ -122,4 +121,78 @@ router.get("/games/:firstId/:secondId", async (req, res) => {
   res.status(200).json(lastFiveMatches);
 });
 
+router.get("/players/statistics/:gameId", async (req, res) => {
+  const gameId = req.params.gameId;
+
+  try {
+    const response = await axios.get(`${url}/players/statistics`, {
+      params: {
+        game: gameId,
+      },
+      headers: {
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": "api-nba-v1.p.rapidapi.com",
+      },
+    });
+    const filterArray = response.data.response.map((val) => {
+      return {
+        team: val.team.name.slice(0, 3),
+        firstName: val.player.firstname,
+        lastName: val.player.lastname[0],
+        points: val.points,
+        reb: val.totReb,
+        assists: val.assists,
+      };
+    });
+    res.status(200).json(filterArray);
+  } catch (e) {
+    console.log("whats up ");
+  }
+});
+
+router.get("/standings", async (req, res) => {
+  console.log("omer");
+  const date = new Date();
+  const year = date.getFullYear();
+  try {
+    const response = await axios.get(`${url}/standings`, {
+      params: {
+        league: "standard",
+        season: year.toString(),
+      },
+      headers: {
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": "api-nba-v1.p.rapidapi.com",
+      },
+    });
+    //console.log(response.data.response);
+
+    const nbaTeams = response.data.response.sort((a, b) => {
+      const conferenceComparison = a.conference.name.localeCompare(
+        b.conference.name
+      );
+
+      // If conferences are different, sort by conference
+      if (conferenceComparison !== 0) {
+        return conferenceComparison;
+      }
+
+      // If conferences are the same, sort by record (descending)
+      return a.conference.rank - b.conference.rank;
+    });
+    res.status(200).json(
+      nbaTeams.map((val) => {
+        return {
+          name: val.team.name,
+          logo: val.team.logo,
+          win: val.conference.win,
+          loss: val.conference.loss,
+          precentage: val.win.percentage,
+        };
+      })
+    );
+  } catch (e) {
+    console.log(e);
+  }
+});
 export default router;

@@ -11,7 +11,7 @@ export default function Home() {
   const [games, setGames] = useState([]);
 
   async function fetchGames(currentDay) {
-    const jasonData = await fetch(`http://localhost:8000/${currentDay}`);
+    const jasonData = await fetch(`http://localhost:8000/games/${currentDay}`);
     const data = await jasonData.json();
     console.log(data);
     setGames(data);
