@@ -5,7 +5,19 @@ const router = express();
 
 const url = "https://api-nba-v1.p.rapidapi.com";
 const apiKey = "c582f7932fmsh94e4622ba1b5892p1cf3dbjsnae1e1e44c1ac";
+async function getData({ route, ...rest }) {
+  console.log(rest);
+  console.log(route);
+  const response = await axios.get(`${url}/${route}`, {
+    params: rest,
 
+    headers: {
+      "X-RapidAPI-Key": apiKey,
+      "X-RapidAPI-Host": "api-nba-v1.p.rapidapi.com",
+    },
+  });
+  return response.data.response;
+}
 // getting game details and return obj with only the neceserly details
 function setUpGames(game) {
   let obj = {};
@@ -60,18 +72,11 @@ function filteringFiveLastMatches(games) {
     .map(setUpGames);
 }
 
+//getting all live games
 router.get("/games", async (req, res) => {
   try {
-    const response = await axios.get(`${url}/games`, {
-      headers: {
-        live: "all",
-      },
-      headers: {
-        "X-RapidAPI-Key": apiKey,
-        "X-RapidAPI-Host": "api-nba-v1.p.rapidapi.com",
-      },
-    });
-    res.status(200).json(response.data.response.map(setUpGames));
+    const data = await getData({ route: "games", live: "all" });
+    res.status(200).json(data.map(setUpGames));
   } catch (e) {
     console.log(e);
   }
@@ -85,29 +90,22 @@ router.get("/games/:day", async (req, res) => {
   const year = date.getFullYear();
   const month = date.getMonth();
 
-  const response = await axios.get(`${url}/games`, {
-    params: {
+  try {
+    const data = await getData({
+      route: "games",
       date: `${year}-${month + 1}-${day}`,
-    },
-    headers: {
-      "X-RapidAPI-Key": apiKey,
-      "X-RapidAPI-Host": "api-nba-v1.p.rapidapi.com",
-    },
-  });
-
-  res.status(200).json(response.data.response.map(setUpGames));
+    });
+    res.status(200).json(data.map(setUpGames));
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 router.get("/teams", async (req, res) => {
   try {
-    const response = await axios.get(`${url}/teams`, {
-      headers: {
-        "X-RapidAPI-Key": apiKey,
-        "X-RapidAPI-Host": "api-nba-v1.p.rapidapi.com",
-      },
-    });
+    const data = await getData({ route: "teams" });
     res.status(200).json(
-      response.data.response
+      data
         .filter((val) => {
           return val.logo !== null && val.nbaFranchise;
         })
@@ -123,19 +121,14 @@ router.get("/teams/:teamId", async (req, res) => {
   const { teamId } = req.params;
   console.log(teamId);
   try {
-    const response = await axios.get(`${url}/teams/statistics`, {
-      params: {
-        id: teamId,
-        season: `${year}`,
-      },
-      headers: {
-        "X-RapidAPI-Key": apiKey,
-        "X-RapidAPI-Host": "api-nba-v1.p.rapidapi.com",
-      },
+    const data = await getData({
+      route: "teams/statistics",
+      id: teamId,
+      season: `${year}`,
     });
-    console.log(response.data.response);
+    console.log(data);
     res.status(200).json(
-      response.data.response.map((val) => {
+      data.map((val) => {
         return {
           first: val.games,
           second: val.points,
@@ -152,55 +145,40 @@ router.get("/teams/games/:teamId", async (req, res) => {
   const teamId = req.params.teamId;
   const date = new Date();
   const year = date.getFullYear();
-
-  const response = await axios.get(`${url}/games`, {
-    params: {
+  try {
+    const data = await getData({
+      route: "games",
       season: year.toString(),
       team: teamId,
-    },
-    headers: {
-      "X-RapidAPI-Key": apiKey,
-      "X-RapidAPI-Host": "api-nba-v1.p.rapidapi.com",
-    },
-  });
-
-  const lastFiveMatches = filteringFiveLastMatches(response.data.response);
-  res.status(200).json(lastFiveMatches);
+    });
+    const lastFiveMatches = filteringFiveLastMatches(data);
+    res.status(200).json(lastFiveMatches);
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 //getting the last 5 games between 2 teams
 router.get("/teams/games/:firstId/:secondId", async (req, res) => {
   const { firstId, secondId } = req.params;
-
-  const response = await axios.get(`${url}/games`, {
-    params: {
+  try {
+    const data = await getData({
+      route: "games",
       h2h: `${firstId}-${secondId}`,
-    },
-    headers: {
-      "X-RapidAPI-Key": apiKey,
-      "X-RapidAPI-Host": "api-nba-v1.p.rapidapi.com",
-    },
-  });
-
-  //taking only the games that has been finished
-  const lastFiveMatches = filteringFiveLastMatches(response.data.response);
-  res.status(200).json(lastFiveMatches);
+    });
+    const lastFiveMatches = filteringFiveLastMatches(data);
+    res.status(200).json(lastFiveMatches);
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 router.get("/players/statistics/:gameId", async (req, res) => {
   const gameId = req.params.gameId;
 
   try {
-    const response = await axios.get(`${url}/players/statistics`, {
-      params: {
-        game: gameId,
-      },
-      headers: {
-        "X-RapidAPI-Key": apiKey,
-        "X-RapidAPI-Host": "api-nba-v1.p.rapidapi.com",
-      },
-    });
-    const filterArray = response.data.response.map((val) => {
+    const data = await getData({ route: "players/statistics", game: gameId });
+    const filterArray = data.map((val) => {
       return {
         team: val.team.name.slice(0, 3),
         firstName: val.player.firstname,
@@ -221,19 +199,12 @@ router.get("/standings", async (req, res) => {
   const date = new Date();
   const year = date.getFullYear();
   try {
-    const response = await axios.get(`${url}/standings`, {
-      params: {
-        league: "standard",
-        season: year.toString(),
-      },
-      headers: {
-        "X-RapidAPI-Key": apiKey,
-        "X-RapidAPI-Host": "api-nba-v1.p.rapidapi.com",
-      },
+    const data = await getData({
+      route: "standings",
+      league: "standard",
+      season: year.toString(),
     });
-    //console.log(response.data.response);
-
-    const nbaTeams = response.data.response.sort((a, b) => {
+    const nbaTeams = data.sort((a, b) => {
       const conferenceComparison = a.conference.name.localeCompare(
         b.conference.name
       );
