@@ -10,6 +10,8 @@ import FavoriteLayout from "./routes/FavoriteLayout.jsx";
 import H2h from "./routes/H2h.jsx";
 import AppNav from "./Components/AppNav.jsx";
 import PlayersStatistics from "./routes/PlayersStatistics.jsx";
+import Teams from "./routes/Teams.jsx";
+import TeamInfo from "./routes/TeamInfo.jsx";
 
 function App() {
   const navigate = useNavigate();
@@ -25,24 +27,22 @@ function App() {
         link1={"/games,home"}
         link2={"/Standings,Standings"}
         link3={"/live,live"}
-        link4={"/favorites,favorites"}
+        link4={"/teams,teams"}
       />
       <Routes>
         <Route path="/">
           <Route path="games">
-            <Route index element={<Home></Home>} />
-            <Route path=":firstId/:secondId" element={<H2h></H2h>} />
+            <Route index element={<Home />} />
+            <Route path=":firstId/:secondId" element={<H2h />} />
             <Route path="statistics/:gameId" element={<PlayersStatistics />} />
           </Route>
         </Route>
 
-        <Route path="/Standings" element={<Standings></Standings>} />
-        <Route path="/live" element={<Live></Live>} />
+        <Route path="/Standings" element={<Standings />} />
+        <Route path="/live" element={<Live />} />
 
-        <Route path="/favorites" element={<FavoriteLayout></FavoriteLayout>}>
-          <Route index element={<FavoritesList></FavoritesList>} />
-          <Route path=":id" element={<FavoritesId></FavoritesId>} />
-          <Route path="new" element={<h1>new favorite</h1>} />
+        <Route path="/teams" element={<Teams />}>
+          <Route path=":teamId/:teamName" element={<TeamInfo />} />
         </Route>
 
         <Route path="*" element={<h1>not fount</h1>} />

@@ -8,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
 function AppTable({
+  style,
   firstCell,
   secondCell,
   thirdCell,
@@ -18,7 +19,7 @@ function AppTable({
   const rows = Object.entries(rest);
   console.log(rows);
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} style={style && style}>
       <Table sx={{ minWidth: 200 }} aria-label="simple table">
         <TableHead>
           <TableRow>

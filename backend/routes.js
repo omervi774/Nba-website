@@ -81,6 +81,55 @@ router.get("/games/:day", async (req, res) => {
   res.status(200).json(response.data.response.map(setUpGames));
 });
 
+router.get("/teams", async (req, res) => {
+  try {
+    const response = await axios.get(`${url}/teams`, {
+      headers: {
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": "api-nba-v1.p.rapidapi.com",
+      },
+    });
+    res.status(200).json(
+      response.data.response
+        .filter((val) => {
+          return val.logo !== null && val.nbaFranchise;
+        })
+        .map((val) => {
+          return { id: val.id, logo: val.logo, name: val.name };
+        })
+    );
+  } catch (e) {}
+});
+router.get("/teams/:teamId", async (req, res) => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const { teamId } = req.params;
+  console.log(teamId);
+  try {
+    const response = await axios.get(`${url}/teams/statistics`, {
+      params: {
+        id: teamId,
+        season: `${year}`,
+      },
+      headers: {
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": "api-nba-v1.p.rapidapi.com",
+      },
+    });
+    console.log(response.data.response);
+    res.status(200).json(
+      response.data.response.map((val) => {
+        return {
+          first: val.games,
+          second: val.points,
+          third: val.fgp,
+          forth: val.assists,
+          fifth: val.totReb,
+        };
+      })
+    );
+  } catch (e) {}
+});
 //getting the last 5 games of specific team
 router.get("/teams/games/:teamId", async (req, res) => {
   const teamId = req.params.teamId;

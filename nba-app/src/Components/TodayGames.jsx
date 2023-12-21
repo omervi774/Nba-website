@@ -30,7 +30,7 @@ export default function TodayGames(props) {
           <AppNav
             name={"navbar played-games-nav"}
             link1={`/games/${game.home.id}/${game.visitors.id},h2h`}
-            link2={`/statistics,player statistics`}
+            link2={`/standings,standings`}
           />
         )}
         <div
