@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DateCarusel from "../Components/DateCarusel";
-
 import TodayGames from "../Components/TodayGames";
+import fetchingData from "../fetchingData";
 
 const date = new Date();
 const monthDay = date.getDate();
@@ -11,9 +11,7 @@ export default function Home() {
   const [games, setGames] = useState([]);
 
   async function fetchGames(currentDay) {
-    const jasonData = await fetch(`http://localhost:8000/games/${currentDay}`);
-    const data = await jasonData.json();
-    console.log(data);
+    const data = await fetchingData(`games/${currentDay}`);
     setGames(data);
   }
 

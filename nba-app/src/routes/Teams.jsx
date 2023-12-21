@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Loader from "../Components/Loader";
 import { Link, Outlet } from "react-router-dom";
+import fetchingData from "../fetchingData";
 
 function Teams() {
   const [teams, setTeams] = useState([]);
 
   const getTeams = async () => {
-    const jasonData = await fetch(`http://localhost:8000/teams`);
-    const data = await jasonData.json();
-    console.log(data);
+    const data = await fetchingData("teams");
     setTeams(data);
   };
 

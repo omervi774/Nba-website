@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AppTable from "../Components/AppTable";
 import Loader from "../Components/Loader";
+import fetchingData from "../fetchingData";
 export default function Standings() {
   const [standings, setStandings] = useState({
     east: [],
@@ -18,8 +19,7 @@ export default function Standings() {
     };
   };
   const fetchTeamsStanding = async () => {
-    const jasonData = await fetch(`http://localhost:8000/standings`);
-    const data = await jasonData.json();
+    const data = await fetchingData("standings");
     setStandings({
       east: data.slice(0, 15).map(genericPropsname),
       west: data.slice(15).map(genericPropsname),

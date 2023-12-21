@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import DisplayFiveLastGames from "../Components/DisplayFiveLastGames";
 
 import Loader from "../Components/Loader";
+import fetchingData from "../fetchingData";
 export default function H2h() {
   const { firstId, secondId } = useParams();
   const [firstLast5, setFirstLast5] = useState([]);
@@ -10,23 +11,17 @@ export default function H2h() {
   const [last5, setLast5] = useState([]);
   const [loader, setLoader] = useState(true);
   async function fetchAllDetails() {
-    const firstTeamJason = await fetch(
-      `http://localhost:8000/teams/games/${firstId}`
-    );
-    const firstTeamGames = await firstTeamJason.json();
+    const firstTeamGames = await fetchingData(`teams/games/${firstId}`);
     setFirstLast5(firstTeamGames);
 
-    const secondTeamJason = await fetch(
-      `http://localhost:8000/teams/games/${secondId}`
-    );
-    const secondTeamGames = await secondTeamJason.json();
+    const secondTeamGames = await fetchingData(`teams/games/${secondId}`);
     setSecondLast5(secondTeamGames);
 
-    const gamesBetweenJason = await fetch(
-      `http://localhost:8000/teams/games/${firstId}/${secondId}`
+    const gamesBetween = await fetchingData(
+      `teams/games/${firstId}/${secondId}`
     );
-    const gamesBetween = await gamesBetweenJason.json();
     setLast5(gamesBetween);
+
     setLoader(false);
     console.log(firstTeamGames);
   }

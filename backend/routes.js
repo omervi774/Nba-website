@@ -2,9 +2,9 @@ import express from "express";
 import axios from "axios";
 
 const router = express();
-
 const url = "https://api-nba-v1.p.rapidapi.com";
 const apiKey = "c582f7932fmsh94e4622ba1b5892p1cf3dbjsnae1e1e44c1ac";
+
 async function getData({ route, ...rest }) {
   console.log(rest);
   console.log(route);
@@ -180,12 +180,11 @@ router.get("/players/statistics/:gameId", async (req, res) => {
     const data = await getData({ route: "players/statistics", game: gameId });
     const filterArray = data.map((val) => {
       return {
-        team: val.team.name.slice(0, 3),
-        firstName: val.player.firstname,
-        lastName: val.player.lastname[0],
-        points: val.points,
-        reb: val.totReb,
-        assists: val.assists,
+        first: val.player.firstname + " " + val.player.lastname[0],
+        second: val.team.name.slice(0, 3),
+        third: val.points,
+        forth: val.totReb,
+        fifth: val.assists,
       };
     });
     res.status(200).json(filterArray);

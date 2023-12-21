@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import TodayGames from "../Components/TodayGames";
+import fetchingData from "../fetchingData";
 export default function Live() {
   const [liveGames, setLiveGames] = useState([]);
   const fetchLiveGames = async () => {
-    const jasonData = await fetch(`http://localhost:8000/games`);
-    const data = await jasonData.json();
+    const data = await fetchingData("games");
     setLiveGames(data);
   };
   useEffect(() => {

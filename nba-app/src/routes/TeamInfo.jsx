@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AppTable from "../Components/AppTable";
+import fetchingData from "../fetchingData";
 
 function TeamInfo(props) {
   const { teamId, teamName } = useParams();
   const [team, setTeam] = useState([]);
   const getTeam = async () => {
-    const jasonData = await fetch(`http://localhost:8000/teams/${teamId}`);
-    const data = await jasonData.json();
+    const data = await fetchingData(`teams/${teamId}`);
     setTeam(data);
   };
   useEffect(() => {
