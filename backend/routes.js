@@ -22,7 +22,7 @@ function setUpGames(game) {
 
   obj.gameId = game.id;
   obj.status = game.status.long;
-  if (game.status.long !== "Finished") {
+  if (game.status.long === "Scheduled") {
     const utcDate = new Date(game.date.start);
     const localHour = utcDate.getHours();
     const localMin = utcDate.getMinutes();
@@ -59,6 +59,23 @@ function filteringFiveLastMatches(games) {
     })
     .map(setUpGames);
 }
+
+router.get("/games", async (req, res) => {
+  try {
+    const response = await axios.get(`${url}/games`, {
+      headers: {
+        live: "all",
+      },
+      headers: {
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": "api-nba-v1.p.rapidapi.com",
+      },
+    });
+    res.status(200).json(response.data.response.map(setUpGames));
+  } catch (e) {
+    console.log(e);
+  }
+});
 
 // getting all games acording to specific day.
 router.get("/games/:day", async (req, res) => {
