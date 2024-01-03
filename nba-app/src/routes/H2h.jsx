@@ -29,7 +29,10 @@ export default function H2h() {
     fetchAllDetails();
   }, []);
   return (
-    <div className="teams-details-page-container pages-container">
+    <div
+      className="teams-details-page-container pages-container"
+      style={{ display: "flex" }}
+    >
       {loader ? (
         <Loader />
       ) : (

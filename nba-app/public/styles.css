@@ -5,9 +5,9 @@
 body {
   background-color: #e7e7e7;
 }
-div {
+/* div {
   display: flex;
-}
+} */
 #root {
   display: block;
 }
@@ -16,11 +16,13 @@ div {
   height: 100vh; /* 100% of the viewport height */
 }
 .column-container {
+  display: flex;
   flex-direction: column;
 }
 
 /* container of all the divis that centerize its content */
 .centerize-container {
+  display: flex;
   align-items: center;
   justify-content: center;
 }
@@ -53,6 +55,7 @@ ul {
   flex: 1;
 }
 .game-page-container {
+  display: flex;
   align-items: center;
   justify-content: start;
 }
@@ -72,6 +75,7 @@ ul {
   gap: 0.5rem;
 }
 .game-container {
+  display: flex;
   padding-top: 1rem;
   justify-content: space-around;
   align-items: center;

@@ -29,7 +29,7 @@ export default function Standings() {
     fetchTeamsStanding();
   }, []);
   return (
-    <div className="pages-container" style={{ gap: "1.5rem" }}>
+    <div className="pages-container" style={{ display: "flex", gap: "1.5rem" }}>
       {standings.east.length ? (
         <>
           <AppTable

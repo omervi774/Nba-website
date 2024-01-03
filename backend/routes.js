@@ -83,21 +83,37 @@ router.get("/games", async (req, res) => {
 });
 
 // getting all games acording to specific day.
-router.get("/games/:day", async (req, res) => {
+router.get("/games/:day/:month/:year", async (req, res) => {
   console.log("omer");
   const date = new Date();
-  const day = req.params.day;
-  const year = date.getFullYear();
-  const month = date.getMonth();
+  const { day, month, year } = req.params;
+  console.log("mon", Number(month) + 1);
+  console.log("day", day);
+  // const year = date.getFullYear();
+  // const month = date.getMonth();
+  let correctDay;
+  let correctMon;
+  if (day.length === 1) {
+    correctDay = `0${day}`;
+  } else {
+    correctDay = day;
+  }
+
+  if (month.length === 1) {
+    correctMon = `0${Number(month) + 1}`;
+  } else {
+    correctMon = Number(month) + 1;
+  }
 
   try {
     const data = await getData({
       route: "games",
-      date: `${year}-${month + 1}-${day}`,
+      date: `${year}-${correctMon}-${correctDay}`,
     });
     res.status(200).json(data.map(setUpGames));
   } catch (e) {
-    console.log(e);
+    console.error(e);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
@@ -124,7 +140,7 @@ router.get("/teams/:teamId", async (req, res) => {
     const data = await getData({
       route: "teams/statistics",
       id: teamId,
-      season: `${year}`,
+      season: `${year - 1}`,
     });
     console.log(data);
     res.status(200).json(
@@ -148,7 +164,7 @@ router.get("/teams/games/:teamId", async (req, res) => {
   try {
     const data = await getData({
       route: "games",
-      season: year.toString(),
+      season: (year - 1).toString(),
       team: teamId,
     });
     const lastFiveMatches = filteringFiveLastMatches(data);
@@ -201,7 +217,7 @@ router.get("/standings", async (req, res) => {
     const data = await getData({
       route: "standings",
       league: "standard",
-      season: year.toString(),
+      season: (year - 1).toString(),
     });
     const nbaTeams = data.sort((a, b) => {
       const conferenceComparison = a.conference.name.localeCompare(
