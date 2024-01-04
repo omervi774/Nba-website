@@ -3,26 +3,20 @@ import { useParams } from "react-router-dom";
 import Loader from "../Components/Loader";
 import AppTable from "../Components/AppTable";
 import fetchingData from "../fetchingData";
+import AppModal from "../Components/AppModal";
+import useFetch from "../useFetch";
 
 function PlayersStatistics(props) {
   const { gameId } = useParams();
-
-  const [data, setData] = useState([]);
-
-  const fetchPlayersStatistics = async () => {
-    const data = await fetchingData(`players/statistics/${gameId}`);
-    setData(data);
-  };
-
-  useEffect(() => {
-    fetchPlayersStatistics();
-  }, []);
+  const [data, loader, error, open, handleClose] = useFetch(
+    `http://localhost:8000/players/statistics/${gameId}`
+  );
 
   return (
     <>
-      {data.length === 0 ? (
-        <Loader />
-      ) : (
+      {loader && <Loader />}
+      {error && <AppModal open={open} handleClose={handleClose} />}
+      {data && (
         <AppTable
           firstCell={"PLAYER"}
           secondCell={"TEAM"}

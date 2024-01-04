@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TodayGames from "../Components/TodayGames";
-import fetchingData from "../fetchingData";
+import Loader from "../Components/Loader";
+import AppModal from "../Components/AppModal";
+import useFetch from "../useFetch";
 
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -12,19 +14,9 @@ import dayjs from "dayjs";
 
 export default function Home() {
   const [value, setValue] = useState(dayjs());
-
-  const [games, setGames] = useState([]);
-
-  async function fetchGames(currentDay, currentMonth, year) {
-    let url = `games/${currentDay}/${currentMonth}/${year}`;
-
-    const data = await fetchingData(url);
-    setGames(data);
-  }
-
-  useEffect(() => {
-    fetchGames(value.date(), value.month(), value.year());
-  }, []);
+  const [games, loader, error, open, handleClose] = useFetch(
+    `http://localhost:8000/games/${value.date()}/${value.month()}/${value.year()}`
+  );
 
   return (
     <div>
@@ -36,20 +28,15 @@ export default function Home() {
                 label="pick a date"
                 value={value}
                 onChange={(newValue) => {
-                  console.log(newValue.date());
                   setValue(newValue);
-                  fetchGames(
-                    newValue.date(),
-                    newValue.month(),
-                    newValue.year()
-                  );
                 }}
               />
             </DemoContainer>
           </LocalizationProvider>
         </div>
-
-        <TodayGames games={games} />
+        {loader && <Loader />}
+        {error && <AppModal open={open} handleClose={handleClose} />}
+        {games && <TodayGames games={games} />}
       </div>
     </div>
   );

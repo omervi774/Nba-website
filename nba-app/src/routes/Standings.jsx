@@ -2,12 +2,8 @@ import React, { useEffect, useState } from "react";
 import AppTable from "../Components/AppTable";
 import Loader from "../Components/Loader";
 import fetchingData from "../fetchingData";
+import useFetch from "../useFetch";
 export default function Standings() {
-  const [standings, setStandings] = useState({
-    east: [],
-    west: [],
-  });
-
   const genericPropsname = (val) => {
     const mp = val.win + val.loss;
     return {
@@ -18,19 +14,19 @@ export default function Standings() {
       fifth: val.precentage,
     };
   };
-  const fetchTeamsStanding = async () => {
-    const data = await fetchingData("standings");
-    setStandings({
-      east: data.slice(0, 15).map(genericPropsname),
-      west: data.slice(15).map(genericPropsname),
-    });
-  };
-  useEffect(() => {
-    fetchTeamsStanding();
-  }, []);
+  const [standings, loader, error, open, closeModal] = useFetch(
+    `http://localhost:8000/standings`,
+    (data) => {
+      return {
+        east: data.slice(0, 15).map(genericPropsname),
+        west: data.slice(15).map(genericPropsname),
+      };
+    }
+  );
+
   return (
     <div className="pages-container" style={{ display: "flex", gap: "1.5rem" }}>
-      {standings.east.length ? (
+      {standings !== undefined && standings.east.length ? (
         <>
           <AppTable
             firstCell={"EAST CONFERENCE"}

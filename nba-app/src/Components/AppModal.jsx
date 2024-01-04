@@ -12,10 +12,11 @@ function AppModal(props) {
     >
       <Box box sx={style}>
         <Typography id="modal-modal-title" variant="h6" component="h2">
-          Text in a modal
+          Oops! Something went wrong
         </Typography>
         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          Sorry, we're experiencing technical difficulties try again in a
+          minute.
         </Typography>
       </Box>
     </Modal>

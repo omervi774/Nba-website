@@ -4,38 +4,28 @@ import DisplayFiveLastGames from "../Components/DisplayFiveLastGames";
 
 import Loader from "../Components/Loader";
 import fetchingData from "../fetchingData";
+import useFetch from "../useFetch";
+import AppModal from "../Components/AppModal";
 export default function H2h() {
   const { firstId, secondId } = useParams();
-  const [firstLast5, setFirstLast5] = useState([]);
-  const [secondLast5, setSecondLast5] = useState([]);
-  const [last5, setLast5] = useState([]);
-  const [loader, setLoader] = useState(true);
-  async function fetchAllDetails() {
-    const firstTeamGames = await fetchingData(`teams/games/${firstId}`);
-    setFirstLast5(firstTeamGames);
+  const [firstLast5, , error1, open, handleClose] = useFetch(
+    `http://localhost:8000/teams/games/${firstId}`
+  );
+  const [secondLast5, , error2] = useFetch(
+    `http://localhost:8000/teams/games/${secondId}`
+  );
+  const [last5, , error3] = useFetch(
+    `http://localhost:8000/teams/games/${firstId}`
+  );
 
-    const secondTeamGames = await fetchingData(`teams/games/${secondId}`);
-    setSecondLast5(secondTeamGames);
+  // const [loader, setLoader] = useState(true);
 
-    const gamesBetween = await fetchingData(
-      `teams/games/${firstId}/${secondId}`
-    );
-    setLast5(gamesBetween);
-
-    setLoader(false);
-    console.log(firstTeamGames);
-  }
-  useEffect(() => {
-    fetchAllDetails();
-  }, []);
   return (
     <div
       className="teams-details-page-container pages-container"
       style={{ display: "flex" }}
     >
-      {loader ? (
-        <Loader />
-      ) : (
+      {firstLast5 && secondLast5 && last5 ? (
         <>
           <DisplayFiveLastGames
             games={firstLast5}
@@ -55,6 +45,10 @@ export default function H2h() {
           />
           <DisplayFiveLastGames games={last5} />
         </>
+      ) : error1 || error2 || error3 ? (
+        <AppModal open={true} handleClose={handleClose} />
+      ) : (
+        <Loader />
       )}
     </div>
   );

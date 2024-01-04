@@ -1,23 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Loader from "../Components/Loader";
 import { Link, Outlet } from "react-router-dom";
-import fetchingData from "../fetchingData";
+import useFetch from "../useFetch";
+import AppModal from "../Components/AppModal";
 
 function Teams() {
-  const [teams, setTeams] = useState([]);
-
-  const getTeams = async () => {
-    const data = await fetchingData("teams");
-    setTeams(data);
-  };
-
-  useEffect(() => {
-    getTeams();
-  }, []);
-
+  const [teams, loader, error, open, closeModal] = useFetch(
+    `http://localhost:8000/teams`
+  );
   return (
     <div style={{ flexWrap: "wrap" }}>
-      {teams.length ? (
+      {teams &&
         teams.map((val, index) => {
           return (
             <Link
@@ -35,10 +28,9 @@ function Teams() {
               ></img>
             </Link>
           );
-        })
-      ) : (
-        <Loader />
-      )}
+        })}
+      {loader && <Loader />}
+      {error && <AppModal open={open} handleClose={closeModal} />}
       <Outlet />
     </div>
   );

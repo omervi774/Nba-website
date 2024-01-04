@@ -2,20 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AppTable from "../Components/AppTable";
 import fetchingData from "../fetchingData";
+import useFetch from "../useFetch";
+import Loader from "../Components/Loader";
+import AppModal from "../Components/AppModal";
 
 function TeamInfo(props) {
   const { teamId, teamName } = useParams();
-  const [team, setTeam] = useState([]);
-  const getTeam = async () => {
-    const data = await fetchingData(`teams/${teamId}`);
-    setTeam(data);
-  };
-  useEffect(() => {
-    getTeam();
-  }, [teamId]);
+  const [team, loader, error, open, closeModal] = useFetch(
+    `http://localhost:8000/teams/${teamId}`
+  );
+
   return (
     <>
-      {team.length > 0 && (
+      {team && (
         <div
           className="column-container"
           style={{ flex: "1", alignItems: "center", marginTop: "2rem" }}
@@ -32,6 +31,8 @@ function TeamInfo(props) {
           />
         </div>
       )}
+
+      {error && <AppModal open={open} handleClose={closeModal} />}
     </>
   );
 }
