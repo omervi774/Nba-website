@@ -4,6 +4,8 @@ import axios from "axios";
 const router = express();
 const url = "https://api-nba-v1.p.rapidapi.com";
 const apiKey = "c582f7932fmsh94e4622ba1b5892p1cf3dbjsnae1e1e44c1ac";
+const todayDate = new Date();
+const whatMonth = todayDate.getMonth();
 
 async function getData({ route, ...rest }) {
   console.log(rest);
@@ -85,7 +87,6 @@ router.get("/games", async (req, res) => {
 // getting all games acording to specific day.
 router.get("/games/:day/:month/:year", async (req, res) => {
   console.log("omer");
-  const date = new Date();
   const { day, month, year } = req.params;
   console.log("mon", Number(month) + 1);
   console.log("day", day);
@@ -140,7 +141,7 @@ router.get("/teams/:teamId", async (req, res) => {
     const data = await getData({
       route: "teams/statistics",
       id: teamId,
-      season: `${year - 1}`,
+      season: whatMonth >= 0 && whatMonth < 9 ? `${year - 1}` : `${year}`,
     });
     console.log(data);
     res.status(200).json(
@@ -164,7 +165,7 @@ router.get("/teams/games/:teamId", async (req, res) => {
   try {
     const data = await getData({
       route: "games",
-      season: (year - 1).toString(),
+      season: whatMonth >= 0 && whatMonth < 9 ? `${year - 1}` : `${year}`,
       team: teamId,
     });
     const lastFiveMatches = filteringFiveLastMatches(data);
@@ -217,7 +218,7 @@ router.get("/standings", async (req, res) => {
     const data = await getData({
       route: "standings",
       league: "standard",
-      season: (year - 1).toString(),
+      season: whatMonth >= 0 && whatMonth < 9 ? `${year - 1}` : `${year}`,
     });
     const nbaTeams = data.sort((a, b) => {
       const conferenceComparison = a.conference.name.localeCompare(

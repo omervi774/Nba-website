@@ -15,7 +15,7 @@ export default function H2h() {
     `http://localhost:8000/teams/games/${secondId}`
   );
   const [last5, , error3] = useFetch(
-    `http://localhost:8000/teams/games/${firstId}`
+    `http://localhost:8000/teams/games/${firstId}/${secondId}`
   );
 
   // const [loader, setLoader] = useState(true);
