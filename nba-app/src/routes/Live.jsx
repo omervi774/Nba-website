@@ -5,7 +5,7 @@ import AppModal from "../Components/AppModal";
 import useFetch from "../useFetch";
 export default function Live() {
   const [liveGames, loader, error, open, handleClose] = useFetch(
-    `http://localhost:8000/games`
+    `https://wild-tan-codfish-shoe.cyclic.app/games`
   );
 
   return (

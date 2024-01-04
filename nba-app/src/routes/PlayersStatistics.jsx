@@ -9,7 +9,7 @@ import useFetch from "../useFetch";
 function PlayersStatistics(props) {
   const { gameId } = useParams();
   const [data, loader, error, open, handleClose] = useFetch(
-    `http://localhost:8000/players/statistics/${gameId}`
+    `https://wild-tan-codfish-shoe.cyclic.app/players/statistics/${gameId}`
   );
 
   return (

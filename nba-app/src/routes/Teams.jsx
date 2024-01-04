@@ -6,7 +6,7 @@ import AppModal from "../Components/AppModal";
 
 function Teams() {
   const [teams, loader, error, open, closeModal] = useFetch(
-    `http://localhost:8000/teams`
+    `https://wild-tan-codfish-shoe.cyclic.app/teams`
   );
   return (
     <div style={{ flexWrap: "wrap" }}>

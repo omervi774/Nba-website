@@ -9,13 +9,13 @@ import AppModal from "../Components/AppModal";
 export default function H2h() {
   const { firstId, secondId } = useParams();
   const [firstLast5, , error1, open, handleClose] = useFetch(
-    `http://localhost:8000/teams/games/${firstId}`
+    `https://wild-tan-codfish-shoe.cyclic.app/teams/games/${firstId}`
   );
   const [secondLast5, , error2] = useFetch(
-    `http://localhost:8000/teams/games/${secondId}`
+    `https://wild-tan-codfish-shoe.cyclic.app/teams/games/${secondId}`
   );
   const [last5, , error3] = useFetch(
-    `http://localhost:8000/teams/games/${firstId}/${secondId}`
+    `https://wild-tan-codfish-shoe.cyclic.app/teams/games/${firstId}/${secondId}`
   );
 
   // const [loader, setLoader] = useState(true);

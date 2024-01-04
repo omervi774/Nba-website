@@ -15,7 +15,7 @@ import dayjs from "dayjs";
 export default function Home() {
   const [value, setValue] = useState(dayjs());
   const [games, loader, error, open, handleClose] = useFetch(
-    `http://localhost:8000/games/${value.date()}/${value.month()}/${value.year()}`
+    `https://wild-tan-codfish-shoe.cyclic.app/games/${value.date()}/${value.month()}/${value.year()}`
   );
 
   return (

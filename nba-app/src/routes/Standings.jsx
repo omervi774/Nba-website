@@ -15,7 +15,7 @@ export default function Standings() {
     };
   };
   const [standings, loader, error, open, closeModal] = useFetch(
-    `http://localhost:8000/standings`,
+    `https://wild-tan-codfish-shoe.cyclic.app/standings`,
     (data) => {
       return {
         east: data.slice(0, 15).map(genericPropsname),

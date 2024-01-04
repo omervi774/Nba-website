@@ -9,7 +9,7 @@ import AppModal from "../Components/AppModal";
 function TeamInfo(props) {
   const { teamId, teamName } = useParams();
   const [team, loader, error, open, closeModal] = useFetch(
-    `http://localhost:8000/teams/${teamId}`
+    `https://wild-tan-codfish-shoe.cyclic.app/teams/${teamId}`
   );
 
   return (
